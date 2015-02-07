@@ -35,7 +35,7 @@ The build system by defualt compiles and build the examples.
 * On Linux/Mac
 ```
     $ cd sharedlibpp/build/examples
-    $ math_test libmymath.so
+    $ ./math_test libmymath.so
 ```
 * On Windows first switch to directory where example is created and then 
 ```
