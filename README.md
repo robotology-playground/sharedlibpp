@@ -7,7 +7,7 @@ libraries for different platform (Linux/Mac/Windows). The sharedlibpp provide
 an easy and portable way to create plug-ins which encapsulate your c++ classes
 inside a shared library (so, dylib, dll). The original code is taken and from 
 [YARP](http://wiki.icub.org/yarpdoc/index.html) (Yet Another Robot Platform). 
-The code is simplified by removing dependencies and some helper functions is added 
+The code is simplified by removing dependencies and some helper functions are added 
 to report the native OS error messages on failures. 
 
 
@@ -42,7 +42,7 @@ The build system by defualt compiles and build the examples.
     > math_test math.dll
 ```
 
-## Co-Author and development lead
+## Co-author and development lead
 
 - Ali Paikan (ali.paikan@gmail.com)
 
