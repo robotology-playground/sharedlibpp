@@ -1,6 +1,6 @@
 
-Simple cross platform plug-in system (dll, so, dylib) 
-=====================================================
+Simple cross platform plug-in system 
+====================================
 
 The sharedlibpp is a tiny cross-platform library to create and load shared 
 libraries for different platform (Linux/Mac/Windows). The sharedlibpp provide
@@ -33,10 +33,12 @@ Running exmaple
 The build system by defualt compiles and build the examples. 
 
 * On Linux/Mac
+
     $ cd sharedlibpp/build/examples
     $ math_test libmymath.so 
 
 * On Windows first switch to directory where example is created and then 
+
     > math_test math.dll
 
 
