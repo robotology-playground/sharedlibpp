@@ -77,10 +77,10 @@ bool shlibpp::SharedLibraryFactory::open(const char *dll_name, const char *fn_na
 
 bool shlibpp::SharedLibraryFactory::isValid() const
 {
-    if (returnValue != VOCAB4('S','H','P','P')) {
+    if (returnValue != VOCAB('S','H','P','P')) {
         return false;
     }
-    if (api.startCheck != VOCAB4('S','H','P','P')) {
+    if (api.startCheck != VOCAB('S','H','P','P')) {
         return false;
     }
     if (api.structureSize != sizeof(SharedLibraryClassApi)) {
@@ -89,7 +89,7 @@ bool shlibpp::SharedLibraryFactory::isValid() const
     if (api.systemVersion != 5) {
         return false;
     }
-    if (api.endCheck != VOCAB4('P','L','U','G')) {
+    if (api.endCheck != VOCAB('P','L','U','G')) {
         return false;
     }
     return true;

@@ -16,10 +16,7 @@ namespace shlibpp {
     class Vocab;
 
     // We need a macro for efficient switching.
-    #define VOCAB(a,b,c,d) ((((int)(d))<<24)+(((int)(c))<<16)+(((int)(b))<<8)+((int)(a)))
-    #define VOCAB4(a,b,c,d) VOCAB((a),(b),(c),(d))
-    #define VOCAB3(a,b,c) VOCAB((a),(b),(c),(0))
-    #define VOCAB2(a,b) VOCAB((a),(b),(0),(0))
+    constexpr int32_t VOCAB(char a, char b = 0, char c = 0, char d = 0)  { return ((((int32_t)(d))<<24)+(((int32_t)(c))<<16)+(((int32_t)(b))<<8)+((int32_t)(a))); }
 }
 
 

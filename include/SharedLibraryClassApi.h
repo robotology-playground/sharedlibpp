@@ -81,7 +81,7 @@ extern "C" {
     SHLIBPP_SHARED_CLASS_FN int factoryname(void *api, int len) { \
         struct shlibpp::SharedLibraryClassApi *sapi = (struct shlibpp::SharedLibraryClassApi *) api; \
         if (len<(int)sizeof(shlibpp::SharedLibraryClassApi)) return -1; \
-        sapi->startCheck = VOCAB4('S','H','P','P'); \
+        sapi->startCheck = shlibpp::VOCAB('S','H','P','P'); \
         sapi->structureSize = sizeof(shlibpp::SharedLibraryClassApi); \
         sapi->systemVersion = 5; \
         sapi->create = factoryname ## _create; \
@@ -91,7 +91,7 @@ extern "C" {
         sapi->getClassName = factoryname ## _getClassName; \
         sapi->getBaseClassName = factoryname ## _getBaseClassName; \
         for (int i=0; i<SHLIBPP_SHAREDLIBRARYCLASSAPI_PADDING; i++) { sapi->roomToGrow[i] = 0; } \
-        sapi->endCheck = VOCAB4('P', 'L', 'U', 'G'); \
+        sapi->endCheck = shlibpp::VOCAB('P', 'L', 'U', 'G'); \
         return sapi->startCheck; \
     }
 // The double cast in the _create() and _destroy() functions are
