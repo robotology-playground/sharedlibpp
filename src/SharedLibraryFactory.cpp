@@ -12,6 +12,7 @@ shlibpp::SharedLibraryFactory::SharedLibraryFactory() :
         returnValue(0),
         rct(1)
 {
+    memset(&api, 0, sizeof(SharedLibraryClassApi));
 }
 
 shlibpp::SharedLibraryFactory::SharedLibraryFactory(const char *dll_name,
