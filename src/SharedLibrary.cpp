@@ -1,10 +1,8 @@
-// -*- mode:C++; tab-width:4; c-basic-offset:4; indent-tabs-mode:nil -*-
 
 /*
- * Copyright (C) 2011 Department of Robotics Brain and Cognitive Sciences - Istituto Italiano di Tecnologia
+ * Copyright (C) 2011, 2016 Istituto Italiano di Tecnologia (IIT)
  * Authors: Ali Paikan and Paul Fitzpatrick
  * CopyPolicy: Released under the terms of the LGPLv2.1 or later, see LGPL.TXT
- *
  */
 
 #include <cstddef>
@@ -21,19 +19,23 @@ using namespace shlibpp;
 
 
 SharedLibrary::SharedLibrary() :
-    implementation(nullptr) {
+    implementation(nullptr)
+{
 }
 
 SharedLibrary::SharedLibrary(const char *filename) :
-    implementation(nullptr) {
+    implementation(nullptr)
+{
     open(filename);
 }
 
-SharedLibrary::~SharedLibrary() {
+SharedLibrary::~SharedLibrary()
+{
     close();
 }
 
-bool SharedLibrary::open(const char *filename) {
+bool SharedLibrary::open(const char *filename)
+{
     err_message.clear();
     close();
 #if defined(_WIN32)
@@ -55,20 +57,43 @@ bool SharedLibrary::open(const char *filename) {
     char* msg = dlerror();
     if(msg)
         err_message = msg;
-    return implementation!=nullptr;
+    return implementation != nullptr;
 #endif
 }
 
 bool SharedLibrary::close() {
-    if (implementation!=nullptr) {
-#if defined(_WIN32)
-        FreeLibrary((HINSTANCE)implementation);
+    int result = 0;
+    if (implementation != nullptr) {
+#if defined(WIN32)
+        result = FreeLibrary((HINSTANCE)implementation);
+        LPTSTR msg = nullptr;
+        FormatMessage(
+           FORMAT_MESSAGE_FROM_SYSTEM |FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,
+           nullptr, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+           (LPTSTR)&msg, 0, nullptr);
+
+        if(msg != nullptr) {
+            err_message = std::string(msg);
+            // release memory allocated by FormatMessage()
+            LocalFree(msg); msg = nullptr;
+        }
 #else
-        dlclose(implementation);
+        result = dlclose(implementation);
+        if (result != 0) {
+        char* msg = dlerror();
+        if(msg)
+            err_message = msg;
+        }
 #endif
         implementation = nullptr;
+
     }
-    return true;
+    return (result == 0);
+}
+
+std::string SharedLibrary::error()
+{
+    return err_message;
 }
 
 void *SharedLibrary::getSymbol(const char *symbolName) {
@@ -100,8 +125,4 @@ void *SharedLibrary::getSymbol(const char *symbolName) {
 
 bool SharedLibrary::isValid() const {
     return implementation != nullptr;
-}
-
-std::string SharedLibrary::getLastNativeError() const {
-    return err_message;
 }

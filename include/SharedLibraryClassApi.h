@@ -1,20 +1,15 @@
-// -*- mode:C++; tab-width:4; c-basic-offset:4; indent-tabs-mode:nil -*-
-
 /*
- * Copyright (C) 2013 iCub Facility
+ * Copyright (C) 2013 Istituto Italiano di Tecnologia (IIT)
  * Authors: Paul Fitzpatrick
  * CopyPolicy: Released under the terms of the LGPLv2.1 or later, see LGPL.TXT
- *
  */
 
 #ifndef _SHLIBPP_SHLIBPPLIBRARYCLASSAPI_
 #define _SHLIBPP_SHLIBPPLIBRARYCLASSAPI_
 
-#include <string.h>
-#include <string>
-
 #include "config.h"
 
+#include <cstring>
 
 namespace shlibpp {
     struct SharedLibraryClassApi;   

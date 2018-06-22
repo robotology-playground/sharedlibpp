@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
     shlibpp::SharedLibraryClassFactory<MyMath> myMathFactory(argv[1], "my_math");
     if (!myMathFactory.isValid()) {
         printf("error (%s) : %s\n", shlibpp::Vocab::decode(myMathFactory.getStatus()).c_str(),
-                                    myMathFactory.getLastNativeError().c_str());
+                                    myMathFactory.getError().c_str());
 		return 1;
 	}
 

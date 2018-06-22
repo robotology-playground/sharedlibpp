@@ -1,10 +1,8 @@
-// -*- mode:C++; tab-width:4; c-basic-offset:4; indent-tabs-mode:nil -*-
 
 /*
- * Copyright (C) 2013 iCub Facility
- * Authors: Paul Fitzpatrick
+ * Copyright (C) 2013 Istituto Italiano di Tecnologia (IIT)
+ * Authors: Paul Fitzpatrick <paulfitz@alum.mit.edu>
  * CopyPolicy: Released under the terms of the LGPLv2.1 or later, see LGPL.TXT
- *
  */
 
 #ifndef _SHLIBPP_YARPSHAREDLIBRARYFACTORY_
@@ -32,6 +30,7 @@ public:
      * The status of a factory can be:
      *  - STATUS_NONE: Not configured yet
      *  - STATUS_OK: Present and sane
+     *  - STATUS_LIBRARY_NOT_FOUND: Named shared library was not found
      *  - STATUS_LIBRARY_NOT_LOADED: Named shared library failed to load
      *  - STATUS_FACTORY_NOT_FOUND: Named method wasn't present in library
      *  - STATUS_FACTORY_NOT_FUNCTIONAL: Named method is not working right
@@ -39,6 +38,7 @@ public:
     enum {
         STATUS_NONE,                                         //!< Not configured yet.
         STATUS_OK = VOCAB2('o','k'),                         //!< Present and sane.
+        STATUS_LIBRARY_NOT_FOUND = VOCAB4('f', 'o', 'u', 'n'),  //!< Named shared library was not found.
         STATUS_LIBRARY_NOT_LOADED = VOCAB4('l','o','a','d'), //!< Named shared library failed to load.
         STATUS_FACTORY_NOT_FOUND = VOCAB4('f','a','c','t'),  //!< Named method wasn't present in library.
         STATUS_FACTORY_NOT_FUNCTIONAL = VOCAB3('r','u','n') //!< Named method is not working right.
@@ -87,6 +87,14 @@ public:
     int getStatus() const;
 
     /**
+     * Get the latest error of the factory.
+     *
+     * @return the latest error.
+     */
+    std::string getError() const;
+
+    /**
+
      * Get the factory API, which has creation/deletion methods.
      *
      * @return the factory API
@@ -122,6 +130,20 @@ public:
     std::string getName() const;
 
     /**
+     * Get the type associated with this factory.
+     *
+     * @return the type associated with this factory.
+     */
+    std::string getClassName() const;
+
+    /**
+     * Get the base type associated with this factory.
+     *
+     * @return the base type associated with this factory.
+     */
+    std::string getBaseClassName() const;
+
+    /**
      *
      * Specify function to use as factory.
      *
@@ -132,12 +154,6 @@ public:
      */
     bool useFactoryFunction(void *factory);
 
-    /**
-     * Get Last error message reported by the Os (if presented)
-     * @return return error message
-     */
-    std::string getLastNativeError() const;
-
 private:
     SharedLibrary lib;
     int status;
@@ -145,7 +161,9 @@ private:
     int returnValue;
     int rct;
     std::string name;
-    std::string err_message;
+    std::string className;
+    std::string baseClassName;
+    std::string error;
 };
 
 

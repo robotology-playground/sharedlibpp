@@ -1,7 +1,6 @@
-// -*- mode:C++; tab-width:4; c-basic-offset:4; indent-tabs-mode:nil -*-
 
 /*
- * Copyright (C) 2013 iCub Facility
+ * Copyright (C) 2013 Istituto Italiano di Tecnologia (IIT)
  * Authors: Paul Fitzpatrick
  * CopyPolicy: Released under the terms of the LGPLv2.1 or later, see LGPL.TXT
  *
@@ -36,7 +35,7 @@ public:
     }
 
     T *create() {
-        if (!isValid()) return 0/*nullptr*/;
+        if (!isValid()) return nullptr;
         return (T *)getApi().create();
     }
 

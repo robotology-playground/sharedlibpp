@@ -1,7 +1,6 @@
-// -*- mode:C++; tab-width:4; c-basic-offset:4; indent-tabs-mode:nil -*-
 
 /*
- * Copyright (C) 2011 Department of Robotics Brain and Cognitive Sciences - Istituto Italiano di Tecnologia
+ * Copyright (C) 2011 Istituto Italiano di Tecnologia (IIT)
  * Authors: Paul Fitzpatrick
  * CopyPolicy: Released under the terms of the LGPLv2.1 or later, see LGPL.TXT
  *
@@ -112,7 +111,7 @@ public:
      * @return true iff a valid instance has been created
      */
     bool isValid() const {
-        return content!=0/*nullptr*/;
+        return content != nullptr;
     }
 
     /**

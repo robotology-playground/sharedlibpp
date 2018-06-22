@@ -1,7 +1,6 @@
-// -*- mode:C++; tab-width:4; c-basic-offset:4; indent-tabs-mode:nil -*-
 
 /*
- * Copyright (C) 2011 Department of Robotics Brain and Cognitive Sciences - Istituto Italiano di Tecnologia
+ * Copyright (C) 2011 Istituto Italiano di Tecnologia (IIT)
  * Authors: Paul Fitzpatrick
  * CopyPolicy: Released under the terms of the LGPLv2.1 or later, see LGPL.TXT
  *
@@ -57,6 +56,14 @@ public:
     bool close();
 
     /**
+     * Returns a human-readable string describing the most recent error that
+     * occurred from a call to one of its functions.
+     *
+     * @return the most recent error
+     */
+    std::string error();
+
+    /**
      * Look up a symbol in the shared library.
      */
     void *getSymbol(const char *symbolName);
@@ -67,12 +74,6 @@ public:
      * @return true iff a valid library has been loaded.
      */
     bool isValid() const;
-
-    /**
-     * Get Last error message reported by the Os (if presented)
-     * @return return error message
-     */
-    std::string getLastNativeError() const;
 
 private:
     void *implementation;
