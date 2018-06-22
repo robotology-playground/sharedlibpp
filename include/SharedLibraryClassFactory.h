@@ -32,11 +32,11 @@ public:
     SharedLibraryClassFactory() {
     }
 
-    SharedLibraryClassFactory(const char *dll_name, const char *fn_name = 0/*NULL*/) : SharedLibraryFactory(dll_name,fn_name) {
+    SharedLibraryClassFactory(const char *dll_name, const char *fn_name = 0/*nullptr*/) : SharedLibraryFactory(dll_name,fn_name) {
     }
 
     T *create() {
-        if (!isValid()) return 0/*NULL*/;
+        if (!isValid()) return 0/*nullptr*/;
         return (T *)getApi().create();
     }
 

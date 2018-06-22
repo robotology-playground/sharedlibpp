@@ -34,8 +34,8 @@ public:
      * Constructor for empty instance.
      */
     SharedLibraryClass() :
-            content(NULL),
-            pfactory(NULL) {
+            content(nullptr),
+            pfactory(nullptr) {
     }
 
     /**
@@ -45,8 +45,8 @@ public:
      * destroy) the instance.
      */
     SharedLibraryClass(SharedLibraryClassFactory<T>& factory) :
-            content(NULL),
-            pfactory(NULL) {
+            content(nullptr),
+            pfactory(nullptr) {
         open(factory);
     }
 
@@ -64,7 +64,7 @@ public:
         pfactory = &factory;
         factory.addRef();
 
-        return content != NULL;
+        return content != nullptr;
     }
 
     /**
@@ -73,7 +73,7 @@ public:
      * @return true on success
      */
     virtual bool close() {
-        if (content != NULL) {
+        if (content != nullptr) {
             pfactory->destroy(content);
             //NetworkBase::lock();
             if (pfactory->removeRef() == 0) {
@@ -82,8 +82,8 @@ public:
             //NetworkBase::unlock();
         }
 
-        content = NULL;
-        pfactory = NULL;
+        content = nullptr;
+        pfactory = nullptr;
 
         return true;
     }
@@ -112,7 +112,7 @@ public:
      * @return true iff a valid instance has been created
      */
     bool isValid() const {
-        return content!=0/*NULL*/;
+        return content!=0/*nullptr*/;
     }
 
     /**
@@ -127,7 +127,7 @@ public:
     /**
      * A pointer version of SharedLibraryClass::getContent
      *
-     * @return a pointer to the created instance, or NULL if there is none
+     * @return a pointer to the created instance, or nullptr if there is none
      */
     T *operator->() {
         return (content);

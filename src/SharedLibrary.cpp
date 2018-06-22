@@ -21,11 +21,11 @@ using namespace shlibpp;
 
 
 SharedLibrary::SharedLibrary() :
-    implementation(NULL) {
+    implementation(nullptr) {
 }
 
 SharedLibrary::SharedLibrary(const char *filename) :
-    implementation(NULL) {
+    implementation(nullptr) {
     open(filename);
 }
 
@@ -38,54 +38,54 @@ bool SharedLibrary::open(const char *filename) {
     close();
 #if defined(WIN32)
     implementation = (void*)LoadLibrary(filename);
-    LPTSTR msg = NULL;
+    LPTSTR msg = nullptr;
     FormatMessage(
        FORMAT_MESSAGE_FROM_SYSTEM |FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,
-       NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-       (LPTSTR)&msg, 0, NULL);
+       nullptr, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+       (LPTSTR)&msg, 0, nullptr);
 
-    if(msg != NULL) {
+    if(msg != nullptr) {
         err_message = std::string(msg);
        // release memory allocated by FormatMessage()
-       LocalFree(msg); msg = NULL;
+       LocalFree(msg); msg = nullptr;
     }
-    return (implementation != NULL);
+    return (implementation != nullptr);
 #else
     implementation = dlopen(filename, RTLD_LAZY);
     char* msg = dlerror();
     if(msg)
         err_message = msg;
-    return implementation!=NULL;
+    return implementation!=nullptr;
 #endif
 }
 
 bool SharedLibrary::close() {
-    if (implementation!=NULL) {
+    if (implementation!=nullptr) {
 #if defined(WIN32)
         FreeLibrary((HINSTANCE)implementation);
 #else
         dlclose(implementation);
 #endif
-        implementation = NULL;
+        implementation = nullptr;
     }
     return true;
 }
 
 void *SharedLibrary::getSymbol(const char *symbolName) {
     err_message.clear();
-    if (implementation==NULL) return NULL;
+    if (implementation==nullptr) return nullptr;
 #if defined(WIN32)
     FARPROC proc = GetProcAddress((HINSTANCE)implementation, symbolName);
-    LPTSTR msg = NULL;
+    LPTSTR msg = nullptr;
     FormatMessage(
        FORMAT_MESSAGE_FROM_SYSTEM |FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,
-       NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-       (LPTSTR)&msg, 0, NULL);
+       nullptr, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+       (LPTSTR)&msg, 0, nullptr);
 
-    if(msg != NULL) {
+    if(msg != nullptr) {
         err_message = std::string(msg);
        // release memory allocated by FormatMessage()
-       LocalFree(msg); msg = NULL;
+       LocalFree(msg); msg = nullptr;
     }
     return (void*)proc;
 #else
@@ -99,7 +99,7 @@ void *SharedLibrary::getSymbol(const char *symbolName) {
 }
 
 bool SharedLibrary::isValid() const {
-    return implementation != NULL;
+    return implementation != nullptr;
 }
 
 std::string SharedLibrary::getLastNativeError() const {

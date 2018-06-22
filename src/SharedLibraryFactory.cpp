@@ -35,8 +35,8 @@ bool shlibpp::SharedLibraryFactory::open(const char *dll_name, const char *fn_na
         status = STATUS_LIBRARY_NOT_LOADED;
         return false;
     }
-    void *fn = lib.getSymbol((fn_name!=0/*NULL*/)?fn_name:SHLIBPP_DEFAULT_FACTORY_NAME);
-    if (fn==0/*NULL*/) {
+    void *fn = lib.getSymbol((fn_name!=0/*nullptr*/)?fn_name:SHLIBPP_DEFAULT_FACTORY_NAME);
+    if (fn==0/*nullptr*/) {
         lib.close();
         status = STATUS_FACTORY_NOT_FOUND;
         return false;
@@ -104,7 +104,7 @@ std::string shlibpp::SharedLibraryFactory::getLastNativeError() const {
 
 bool shlibpp::SharedLibraryFactory::useFactoryFunction(void *factory) {
     api.startCheck = 0;
-    if (factory == NULL) {
+    if (factory == nullptr) {
         return false;
     }
     isValid();
