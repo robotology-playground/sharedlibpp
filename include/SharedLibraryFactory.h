@@ -160,7 +160,7 @@ private:
     int status;
     SharedLibraryClassApi api;
     int returnValue;
-    int rct;
+    int rct; // FIXME Remove this reference counter and use a shared_ptr instead.
     std::string name;
     std::string className;
     std::string baseClassName;
