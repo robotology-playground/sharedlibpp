@@ -6,20 +6,19 @@
  * BSD-3-Clause license. See the accompanying LICENSE file for details.
  */
 
-#ifndef _SHLIBPP_SHAREDLIBRARY_
-#define _SHLIBPP_SHAREDLIBRARY_
+#ifndef SHAREDLIBPP_SHAREDLIBRARY_H
+#define SHAREDLIBPP_SHAREDLIBRARY_H
 
 #include <string>
 
 namespace shlibpp {
-    class SharedLibrary;
-}
 
 /**
  * Low-level wrapper for loading shared libraries (DLLs) and accessing
  * symbols within it.
  */
-class shlibpp::SharedLibrary {
+class SharedLibrary
+{
 public:
     /**
      * Initialize, without opening a shared library yet.
@@ -37,6 +36,11 @@ public:
      * Destructor.  Will close() if needed.
      */
     virtual ~SharedLibrary();
+
+    SharedLibrary(const SharedLibrary& rhs) = delete;
+    SharedLibrary(SharedLibrary&& rhs) noexcept = delete;
+    SharedLibrary& operator=(const SharedLibrary& rhs) = delete;
+    SharedLibrary& operator=(SharedLibrary&& rhs) noexcept = delete;
 
     /**
      * Load the named shared library / DLL.  The library is found
@@ -75,11 +79,13 @@ public:
      */
     bool isValid() const;
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 private:
-    void *implementation;
-    std::string err_message;
-    SharedLibrary(const SharedLibrary&); // Not implemented
-    SharedLibrary& operator=(const SharedLibrary&); // Not implemented
+    class Private;
+    Private* mPriv;
+#endif
 };
 
-#endif
+} // namespace shlibpp
+
+#endif // SHAREDLIBPP_SHAREDLIBRARY_H

@@ -6,36 +6,27 @@
  * BSD-3-Clause license. See the accompanying LICENSE file for details.
  */
 
-#ifndef _SHLIBPP_SHAREDLIBRARYCLASS_
-#define _SHLIBPP_SHAREDLIBRARYCLASS_
+#ifndef SHAREDLIBPP_SHAREDLIBRARYCLASS_H
+#define SHAREDLIBPP_SHAREDLIBRARYCLASS_H
 
 #include <SharedLibraryClassFactory.h>
 
 namespace shlibpp {
-    template <class T>
-    class SharedLibraryClass;
-}
-
 
 /**
  * Container for an object created using a factory provided by a shared library.
  * Used to ensure the object is destroyed by a method also provided by the
  * shared library.  Mixing creation and destruction methods could be very bad.
  */
-template <class T>
-class shlibpp::SharedLibraryClass {
-private:
-    T *content;
-    SharedLibraryClassFactory<T> *pfactory;
+template <typename T>
+class SharedLibraryClass
+{
 public:
 
     /**
      * Constructor for empty instance.
      */
-    SharedLibraryClass() :
-            content(nullptr),
-            pfactory(nullptr) {
-    }
+    SharedLibraryClass();
 
     /**
      * Constructor for valid instance of a class from a shared library.
@@ -43,11 +34,12 @@ public:
      * @param factory the factory to use to construct (and eventually
      * destroy) the instance.
      */
-    SharedLibraryClass(SharedLibraryClassFactory<T>& factory) :
-            content(nullptr),
-            pfactory(nullptr) {
-        open(factory);
-    }
+    SharedLibraryClass(SharedLibraryClassFactory<T>& factory);
+
+    /**
+     * Destructor.
+     */
+    virtual ~SharedLibraryClass();
 
     /**
      * Construct an instance using the specified factory.  If an
@@ -57,42 +49,14 @@ public:
      * destroy) the instance.
      * @return true on success
      */
-    bool open(SharedLibraryClassFactory<T>& factory) {
-        close();
-        content = factory.create();
-        pfactory = &factory;
-        factory.addRef();
-
-        return content != nullptr;
-    }
+    bool open(SharedLibraryClassFactory<T>& factory);
 
     /**
      * Destroy an instance if one has been created.
      *
      * @return true on success
      */
-    virtual bool close() {
-        if (content != nullptr) {
-            pfactory->destroy(content);
-            //NetworkBase::lock();
-            if (pfactory->removeRef() == 0) {
-                delete pfactory;
-            }
-            //NetworkBase::unlock();
-        }
-
-        content = nullptr;
-        pfactory = nullptr;
-
-        return true;
-    }
-
-    /**
-     * Destructor.
-     */
-    virtual ~SharedLibraryClass() {
-        close();
-    }
+    virtual bool close();
 
     /**
      * Gives access to the created instance.
@@ -102,9 +66,7 @@ public:
      *
      * @return the created instance
      */
-    T& getContent() {
-        return *content;
-    }
+    T& getContent();
 
     /**
      * Gives access to the created instance (const version).
@@ -114,55 +76,53 @@ public:
      *
      * @return the created instance
      */
-    const T& getContent() const {
-        return *content;
-    }
+    const T& getContent() const;
 
     /**
      * Check whether a valid instance has been created.
      *
      * @return true iff a valid instance has been created
      */
-    bool isValid() const {
-        return content != nullptr;
-    }
+    bool isValid() const;
 
     /**
      * Shorthand for SharedLibraryClass::getContent
      *
      * @return the created instance
      */
-    T& operator*() {
-        return (*content);
-    }
+    T& operator*();
 
     /**
      * Shorthand for SharedLibraryClass::getContent (const version)
      *
      * @return the created instance
      */
-    const T& operator*() const {
-        return (*content);
-    }
+    const T& operator*() const;
 
     /**
      * A pointer version of SharedLibraryClass::getContent
      *
      * @return a pointer to the created instance, or nullptr if there is none
      */
-    T *operator->() {
-        return (content);
-    }
+    T* operator->();
 
     /**
      * A pointer version of SharedLibraryClass::getContent (const version)
      *
      * @return a pointer to the created instance, or nullptr if there is none
      */
-    const T *operator->() const {
-        return (content);
-    }
+    const T* operator->() const;
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+private:
+    T* content;
+    SharedLibraryClassFactory<T> *pfactory;
+#endif
 };
 
+} // namespace shlibpp
 
-#endif // _SHLIBPP_SHAREDLIBRARYCLASS_
+
+#include <SharedLibraryClass-inl.h>
+
+#endif // SHAREDLIBPP_SHAREDLIBRARYCLASS_H

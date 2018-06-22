@@ -6,18 +6,14 @@
  * BSD-3-Clause license. See the accompanying LICENSE file for details.
  */
 
-#ifndef _SHLIBPP_YARPSHAREDLIBRARYFACTORY_
-#define _SHLIBPP_YARPSHAREDLIBRARYFACTORY_
+#ifndef SHAREDLIBPP_SHAREDLIBRARYFACTORY_H
+#define SHAREDLIBPP_SHAREDLIBRARYFACTORY_H
 
 #include <string>
-#include <Vocab.h>
-#include <SharedLibrary.h>
 #include <SharedLibraryClassApi.h>
 
 
 namespace shlibpp {
-    class SharedLibraryFactory;
-}
 
 /**
  * A wrapper for a named factory method in a named shared library.
@@ -25,24 +21,26 @@ namespace shlibpp {
  * indeed behave like a YARP plugin hook before offering access to it.
  * This is to avoid accidents, it is not a security mechanism.
  */
-class shlibpp::SharedLibraryFactory {
+class SharedLibraryFactory
+{
 public:
     /**
      * The status of a factory can be:
-     *  - STATUS_NONE: Not configured yet
-     *  - STATUS_OK: Present and sane
-     *  - STATUS_LIBRARY_NOT_FOUND: Named shared library was not found
-     *  - STATUS_LIBRARY_NOT_LOADED: Named shared library failed to load
-     *  - STATUS_FACTORY_NOT_FOUND: Named method wasn't present in library
-     *  - STATUS_FACTORY_NOT_FUNCTIONAL: Named method is not working right
+     *  - None: Not configured yet
+     *  - OK: Present and sane
+     *  - LibraryNotFound: Named shared library was not found
+     *  - LibraryNotLoaded: Named shared library failed to load
+     *  - FactoryNotFound: Named method wasn't present in library
+     *  - FactoryNotFunctional: Named method is not working right
      */
-    enum {
-        STATUS_NONE,                                         //!< Not configured yet.
-        STATUS_OK = VOCAB('o','k'),                         //!< Present and sane.
-        STATUS_LIBRARY_NOT_FOUND = VOCAB('f', 'o', 'u', 'n'),  //!< Named shared library was not found.
-        STATUS_LIBRARY_NOT_LOADED = VOCAB('l','o','a','d'), //!< Named shared library failed to load.
-        STATUS_FACTORY_NOT_FOUND = VOCAB('f','a','c','t'),  //!< Named method wasn't present in library.
-        STATUS_FACTORY_NOT_FUNCTIONAL = VOCAB('r','u','n') //!< Named method is not working right.
+    enum class Status : std::uint32_t
+    {
+        None = 0,            //!< Not configured yet.
+        OK,                  //!< Present and sane.
+        LibraryNotFound,     //!< Named shared library was not found.
+        LibraryNotLoaded,    //!< Named shared library failed to load.
+        FactoryNotFound,     //!< Named method wasn't present in library.
+        FactoryNotFunctional //!< Named method is not working right.
     };
 
     /**
@@ -56,8 +54,8 @@ public:
      * @param dll_name name/path of shared library.
      * @param fn_name name of factory method, a symbol within the shared library.
      */
-    SharedLibraryFactory(const char *dll_name,
-                         const char *fn_name = nullptr);
+    explicit SharedLibraryFactory(const char *dll_name,
+                                  const char *fn_name = nullptr);
 
     /**
      * Destructor
@@ -85,7 +83,7 @@ public:
      *
      * @return one of the SharedLibraryFactory::STATUS_* codes.
      */
-    int getStatus() const;
+    Status getStatus() const;
 
     /**
      * Get the latest error of the factory.
@@ -155,17 +153,13 @@ public:
      */
     bool useFactoryFunction(void *factory);
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 private:
-    SharedLibrary lib;
-    int status;
-    SharedLibraryClassApi api;
-    int returnValue;
-    int rct; // FIXME Remove this reference counter and use a shared_ptr instead.
-    std::string name;
-    std::string className;
-    std::string baseClassName;
-    std::string error;
+    class Private;
+    Private* mPriv;
+#endif
 };
 
+} // namespace shlibpp
 
-#endif
+#endif // SHAREDLIBPP_SHAREDLIBRARYFACTORY_H

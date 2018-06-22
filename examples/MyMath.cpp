@@ -11,12 +11,12 @@
 
 SHLIBPP_DEFINE_SHARED_SUBCLASS(my_math, MyMathImpl, MyMath);
 
-int MyMathImpl::add(int a, int b) 
+int MyMathImpl::add(int a, int b)
 {
-	return (a+b);
+    return (a+b);
 }
 
-int MyMathImpl::sub(int a, int b) 
+int MyMathImpl::sub(int a, int b)
 {
-	return (a-b);
+    return (a-b);
 }

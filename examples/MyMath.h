@@ -6,18 +6,20 @@
  * BSD-3-Clause license. See the accompanying LICENSE file for details.
  */
 
-#ifndef _MYMATH_H_
-#define _MYMATH_H_
+#ifndef MYMATH_H
+#define MYMATH_H
 
-class MyMath {
+class MyMath
+{
 public:
     virtual int add(int a, int b) = 0;
     virtual int sub(int a, int b) = 0;
 };
 
-class MyMathImpl : public MyMath {
+class MyMathImpl : public MyMath
+{
 public:
-	int add(int a, int b);
+    int add(int a, int b);
     int sub(int a, int b);
 };
 
