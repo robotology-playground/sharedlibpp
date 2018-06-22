@@ -9,7 +9,7 @@
 
 #include <cstddef>
 
-#if defined(WIN32)
+#if defined(_WIN32)
 #  include <windows.h>
 #else
 #  include <dlfcn.h>
@@ -36,7 +36,7 @@ SharedLibrary::~SharedLibrary() {
 bool SharedLibrary::open(const char *filename) {
     err_message.clear();
     close();
-#if defined(WIN32)
+#if defined(_WIN32)
     implementation = (void*)LoadLibrary(filename);
     LPTSTR msg = nullptr;
     FormatMessage(
@@ -61,7 +61,7 @@ bool SharedLibrary::open(const char *filename) {
 
 bool SharedLibrary::close() {
     if (implementation!=nullptr) {
-#if defined(WIN32)
+#if defined(_WIN32)
         FreeLibrary((HINSTANCE)implementation);
 #else
         dlclose(implementation);
@@ -74,7 +74,7 @@ bool SharedLibrary::close() {
 void *SharedLibrary::getSymbol(const char *symbolName) {
     err_message.clear();
     if (implementation==nullptr) return nullptr;
-#if defined(WIN32)
+#if defined(_WIN32)
     FARPROC proc = GetProcAddress((HINSTANCE)implementation, symbolName);
     LPTSTR msg = nullptr;
     FormatMessage(
