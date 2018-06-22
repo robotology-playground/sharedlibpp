@@ -12,10 +12,6 @@
 #include <SharedLibraryFactory.h>
 
 namespace shlibpp {
-    template <class T>
-    class SharedLibraryClassFactory;
-}
-
 
 /**
  *
@@ -26,23 +22,35 @@ namespace shlibpp {
  *
  */
 template <class T>
-class shlibpp::SharedLibraryClassFactory : public SharedLibraryFactory {
+class SharedLibraryClassFactory : public SharedLibraryFactory
+{
 public:
-    SharedLibraryClassFactory() {
+    SharedLibraryClassFactory()
+    {
     }
 
-    SharedLibraryClassFactory(const char *dll_name, const char *fn_name = 0/*nullptr*/) : SharedLibraryFactory(dll_name,fn_name) {
+    SharedLibraryClassFactory(const char *dll_name, const char *fn_name = 0/*nullptr*/) :
+            SharedLibraryFactory(dll_name,fn_name)
+    {
     }
 
-    T *create() {
-        if (!isValid()) return nullptr;
+    T *create() const
+    {
+        if (!isValid()) {
+            return nullptr;
+        }
         return (T *)getApi().create();
     }
 
-    void destroy(T *obj) {
-        if (!isValid()) return;
+    void destroy(T *obj) const
+    {
+        if (!isValid()) {
+            return;
+        }
         getApi().destroy(obj);
     }
 };
+
+} // namespace shlibpp
 
 #endif

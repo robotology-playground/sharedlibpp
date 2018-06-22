@@ -95,13 +95,26 @@ public:
     }
 
     /**
-     * Gives access to the created instance.  No check made to ensure
-     * an instance is in fact present.  Call SharedLibraryClass::isValid
-     * first if unsure.
+     * Gives access to the created instance.
+     *
+     * No check made to ensure an instance is in fact present.
+     * Call SharedLibraryClass::isValid first if unsure.
      *
      * @return the created instance
      */
     T& getContent() {
+        return *content;
+    }
+
+    /**
+     * Gives access to the created instance (const version).
+     *
+     * No check made to ensure an instance is in fact present.
+     * Call SharedLibraryClass::isValid first if unsure.
+     *
+     * @return the created instance
+     */
+    const T& getContent() const {
         return *content;
     }
 
@@ -124,11 +137,29 @@ public:
     }
 
     /**
+     * Shorthand for SharedLibraryClass::getContent (const version)
+     *
+     * @return the created instance
+     */
+    const T& operator*() const {
+        return (*content);
+    }
+
+    /**
      * A pointer version of SharedLibraryClass::getContent
      *
      * @return a pointer to the created instance, or nullptr if there is none
      */
     T *operator->() {
+        return (content);
+    }
+
+    /**
+     * A pointer version of SharedLibraryClass::getContent (const version)
+     *
+     * @return a pointer to the created instance, or nullptr if there is none
+     */
+    const T *operator->() const {
         return (content);
     }
 };
