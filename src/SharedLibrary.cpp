@@ -38,17 +38,17 @@ bool SharedLibrary::open(const char *filename) {
     close();
 #if defined(WIN32)
     implementation = (void*)LoadLibrary(filename);
-	LPTSTR msg = NULL;
-	FormatMessage(
-	   FORMAT_MESSAGE_FROM_SYSTEM |FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,
-	   NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-	   (LPTSTR)&msg, 0, NULL);
+    LPTSTR msg = NULL;
+    FormatMessage(
+       FORMAT_MESSAGE_FROM_SYSTEM |FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,
+       NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+       (LPTSTR)&msg, 0, NULL);
 
-	if(msg != NULL) {
-		err_message = std::string(msg);
-	   // release memory allocated by FormatMessage()
-	   LocalFree(msg); msg = NULL;
-	}
+    if(msg != NULL) {
+        err_message = std::string(msg);
+       // release memory allocated by FormatMessage()
+       LocalFree(msg); msg = NULL;
+    }
     return (implementation != NULL);
 #else
     implementation = dlopen(filename, RTLD_LAZY);
@@ -76,18 +76,18 @@ void *SharedLibrary::getSymbol(const char *symbolName) {
     if (implementation==NULL) return NULL;
 #if defined(WIN32)
     FARPROC proc = GetProcAddress((HINSTANCE)implementation, symbolName);
-	LPTSTR msg = NULL;
-	FormatMessage(
-	   FORMAT_MESSAGE_FROM_SYSTEM |FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,
-	   NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-	   (LPTSTR)&msg, 0, NULL);
+    LPTSTR msg = NULL;
+    FormatMessage(
+       FORMAT_MESSAGE_FROM_SYSTEM |FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,
+       NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+       (LPTSTR)&msg, 0, NULL);
 
-	if(msg != NULL) {
-		err_message = std::string(msg);
-	   // release memory allocated by FormatMessage()
-	   LocalFree(msg); msg = NULL;
-	}
-	return (void*)proc;
+    if(msg != NULL) {
+        err_message = std::string(msg);
+       // release memory allocated by FormatMessage()
+       LocalFree(msg); msg = NULL;
+    }
+    return (void*)proc;
 #else
     dlerror();
     void* func = dlsym(implementation,symbolName);
