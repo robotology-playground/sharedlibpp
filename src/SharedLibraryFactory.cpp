@@ -31,8 +31,8 @@ bool shlibpp::SharedLibraryFactory::open(const char *dll_name, const char *fn_na
     name = "";
     status = STATUS_NONE;
     api.startCheck = 0;
-    if (!lib.open(dll_name)) {        
-        status = STATUS_LIBRARY_NOT_LOADED;        
+    if (!lib.open(dll_name)) {
+        status = STATUS_LIBRARY_NOT_LOADED;
         return false;
     }
     void *fn = lib.getSymbol((fn_name!=0/*NULL*/)?fn_name:SHLIBPP_DEFAULT_FACTORY_NAME);

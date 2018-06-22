@@ -35,12 +35,12 @@ SharedLibrary::~SharedLibrary() {
 
 bool SharedLibrary::open(const char *filename) {
     err_message.clear();
-    close();    
+    close();
 #if defined(WIN32)
-    implementation = (void*)LoadLibrary(filename);    
+    implementation = (void*)LoadLibrary(filename);
 	LPTSTR msg = NULL;
-	FormatMessage(   
-	   FORMAT_MESSAGE_FROM_SYSTEM |FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,  
+	FormatMessage(
+	   FORMAT_MESSAGE_FROM_SYSTEM |FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,
 	   NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 	   (LPTSTR)&msg, 0, NULL);
 
@@ -50,7 +50,7 @@ bool SharedLibrary::open(const char *filename) {
 	   LocalFree(msg); msg = NULL;
 	}
     return (implementation != NULL);
-#else    
+#else
     implementation = dlopen(filename, RTLD_LAZY);
     char* msg = dlerror();
     if(msg)
@@ -63,7 +63,7 @@ bool SharedLibrary::close() {
     if (implementation!=NULL) {
 #if defined(WIN32)
         FreeLibrary((HINSTANCE)implementation);
-#else        
+#else
         dlclose(implementation);
 #endif
         implementation = NULL;
@@ -77,8 +77,8 @@ void *SharedLibrary::getSymbol(const char *symbolName) {
 #if defined(WIN32)
     FARPROC proc = GetProcAddress((HINSTANCE)implementation, symbolName);
 	LPTSTR msg = NULL;
-	FormatMessage(   
-	   FORMAT_MESSAGE_FROM_SYSTEM |FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,  
+	FormatMessage(
+	   FORMAT_MESSAGE_FROM_SYSTEM |FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,
 	   NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 	   (LPTSTR)&msg, 0, NULL);
 
