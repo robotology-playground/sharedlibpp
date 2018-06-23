@@ -9,7 +9,6 @@
 #include <SharedLibraryFactory.h>
 #include <SharedLibraryClassApi.h>
 #include <SharedLibrary.h>
-#include <Vocab.h>
 
 #include <sys/stat.h>
 #if defined(_WIN32)

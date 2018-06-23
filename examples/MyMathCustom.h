@@ -9,6 +9,20 @@
 #ifndef MYMATHCUSTOM_H
 #define MYMATHCUSTOM_H
 
+#include <cinttypes>
+
+constexpr int32_t CUSTOM_START_CHECK =
+    static_cast<int32_t>('T') +
+    (static_cast<int32_t>('E') << 8) +
+    (static_cast<int32_t>('S') << 16) +
+    (static_cast<int32_t>('T') << 24);
+constexpr int32_t CUSTOM_END_CHECK =
+    static_cast<int32_t>('T') +
+    (static_cast<int32_t>('S') << 8) +
+    (static_cast<int32_t>('E') << 16) +
+    (static_cast<int32_t>('T') << 24);
+constexpr int32_t CUSTOM_SYSTEM_VERSION = 42;
+
 class MyMathCustom
 {
 public:

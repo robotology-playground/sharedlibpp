@@ -12,7 +12,6 @@
 #include "config.h"
 
 #include <cstring>
-#include <Vocab.h>
 
 namespace shlibpp {
 
@@ -60,9 +59,18 @@ extern "C" {
 
 
 #define SHLIBPP_SHARED_CLASS_FN extern "C" SHLIBPP_EXPORT
-#define SHLIBPP_DEFAULT_START_CHECK shlibpp::VOCAB('S','H','P','P')
-#define SHLIBPP_DEFAULT_END_CHECK shlibpp::VOCAB('P', 'L', 'U', 'G')
-#define SHLIBPP_DEFAULT_SYSTEM_VERSION 5
+
+constexpr int32_t SHLIBPP_DEFAULT_START_CHECK =
+    static_cast<int32_t>('S') +
+    (static_cast<int32_t>('H') << 8) +
+    (static_cast<int32_t>('P') << 16) +
+    (static_cast<int32_t>('P') << 24);
+constexpr int32_t SHLIBPP_DEFAULT_END_CHECK =
+    static_cast<int32_t>('P') +
+    (static_cast<int32_t>('L') << 8) +
+    (static_cast<int32_t>('U') << 16) +
+    (static_cast<int32_t>('G') << 24);
+constexpr int32_t SHLIBPP_DEFAULT_SYSTEM_VERSION = 5;
 #define SHLIBPP_DEFAULT_FACTORY_NAME "shlibpp_default_factory"
 
 /**

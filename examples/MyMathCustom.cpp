@@ -9,7 +9,7 @@
 #include "MyMathCustom.h"
 #include <SharedLibraryClass.h>
 
-SHLIBPP_DEFINE_SHARED_SUBCLASS_CUSTOM(shlibpp::VOCAB('T', 'E', 'S', 'T'), shlibpp::VOCAB('T', 'S', 'E', 'T'), 42, my_math_custom, MyMathCustomImpl, MyMathCustom);
+SHLIBPP_DEFINE_SHARED_SUBCLASS_CUSTOM(CUSTOM_START_CHECK, CUSTOM_END_CHECK, CUSTOM_SYSTEM_VERSION, my_math_custom, MyMathCustomImpl, MyMathCustom);
 
 int MyMathCustomImpl::add(int a, int b)
 {

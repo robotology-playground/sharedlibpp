@@ -25,9 +25,9 @@ int main(int argc, char *argv[])
     // create an instance of shared library class factory to load the library
     printf("Loading the shared library... \n");
     shlibpp::SharedLibraryClassFactory<MyMathCustom> myMathFactory(argv[1],
-                                                                   shlibpp::VOCAB('T', 'E', 'S', 'T'),
-                                                                   shlibpp::VOCAB('T', 'S', 'E', 'T'),
-                                                                   42,
+                                                                   CUSTOM_START_CHECK,
+                                                                   CUSTOM_END_CHECK,
+                                                                   CUSTOM_SYSTEM_VERSION,
                                                                    "my_math_custom");
     if (!myMathFactory.isValid()) {
         printf("error (%d) : %s\n", static_cast<std::uint32_t>(myMathFactory.getStatus()),
