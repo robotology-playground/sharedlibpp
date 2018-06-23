@@ -14,3 +14,8 @@ add_library(mymath MODULE MyMath.cpp MyMath.h)
 
 add_executable(math_test math_test.cpp)
 target_link_libraries(math_test sharedlib++)
+
+add_library(mymathcustom MODULE MyMathCustom.cpp MyMathCustom.h)
+
+add_executable(math_test_custom math_test_custom.cpp)
+target_link_libraries(math_test_custom sharedlib++)
