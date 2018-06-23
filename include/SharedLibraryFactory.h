@@ -10,10 +10,10 @@
 #define SHAREDLIBPP_SHAREDLIBRARYFACTORY_H
 
 #include <string>
-#include <SharedLibraryClassApi.h>
-
 
 namespace shlibpp {
+
+class SharedLibraryClassApi;
 
 /**
  * A wrapper for a named factory method in a named shared library.
@@ -44,18 +44,60 @@ public:
     };
 
     /**
-     * Constructor for unconfigured factory.
+     * Constructor for unconfigured factory with custom start check, end check,
+     * system version and factory name.
+     *
+     * @param startCheck a 32-bit integer that is checked when loading a plugin.
+     *                   It must be the same used when creating the plugin
+     * @param endCheck a 32-bit integer that is checked when loading a plugin.
+     *                   It must be the same used when creating the plugin
+     * @param systemVersion a number representing the version of the plugin api
+     *                      that is checked when loading a plugin.
+     *                      It must be the same used when creating the plugin.
+     * @param factoryName name of factory method, a symbol within the shared
+     *                    library.
+     *                    If set, it must be the same used when creating the
+     *                    plugin.
      */
-    explicit SharedLibraryFactory();
+    explicit SharedLibraryFactory(int32_t startCheck = -1,
+                                  int32_t endCheck = -1,
+                                  int32_t systemVersion = -1,
+                                  const char *factoryName = nullptr);
 
     /**
-     * Constructor.
+     * Constructor with custom start check, end check, system version and
+     * factoryName
      *
      * @param dll_name name/path of shared library.
-     * @param fn_name name of factory method, a symbol within the shared library.
+     * @param startCheck a 32-bit integer that is checked when loading a plugin.
+     *                   It must be the same used when creating the plugin
+     * @param endCheck a 32-bit integer that is checked when loading a plugin.
+     *                   It must be the same used when creating the plugin
+     * @param systemVersion a number representing the version of the plugin api
+     *                      that is checked when loading a plugin.
+     *                      It must be the same used when creating the plugin.
+     * @param factoryName name of factory method, a symbol within the shared
+     *                    library.
+     *                    If set, it must be the same used when creating the
+     *                    plugin.
      */
-    explicit SharedLibraryFactory(const char *dll_name,
-                                  const char *fn_name = nullptr);
+    SharedLibraryFactory(const char *dll_name,
+                         int32_t startCheck = -1,
+                         int32_t endCheck = -1,
+                         int32_t systemVersion = -1,
+                         const char *factoryName = nullptr);
+
+    /**
+     * Constructor with default start check, end check and system version.
+     *
+     * @param dll_name name/path of shared library.
+     * @param factoryName name of factory method, a symbol within the shared
+     *                    library.
+     *                    If set, it must be the same used when creating the
+     *                    plugin.
+     */
+    SharedLibraryFactory(const char *dll_name,
+                         const char *factoryName = nullptr);
 
     /**
      * Destructor
@@ -66,10 +108,37 @@ public:
      * Configure the factory.
      *
      * @param dll_name name/path of shared library.
-     * @param fn_name name of factory method, a symbol within the shared library.
+     * @param startCheck a 32-bit integer that is checked when loading a plugin.
+     *                   It must be the same used when creating the plugin
+     * @param endCheck a 32-bit integer that is checked when loading a plugin.
+     *                   It must be the same used when creating the plugin
+     * @param systemVersion a number representing the version of the plugin api
+     *                      that is checked when loading a plugin.
+     *                      It must be the same used when creating the plugin.
+     * @param factoryName name of factory method, a symbol within the shared
+     *                    library.
+     *                    If set, it must be the same used when creating the
+     *                    plugin.
      * @return true on success.
      */
-    bool open(const char *dll_name, const char *fn_name = nullptr);
+    bool open(const char *dll_name,
+              int32_t startCheck = -1,
+              int32_t endCheck = -1,
+              int32_t systemVersion = -1,
+              const char *factoryName = nullptr);
+
+    /**
+     * Configure the factory.
+     *
+     * @param dll_name name/path of shared library.
+     * @param factoryName name of factory method, a symbol within the shared
+     *                    library.
+     *                    If set, it must be the same used when creating the
+     *                    plugin.
+     * @return true on success.
+     */
+    bool open(const char *dll_name,
+              const char *factoryName = nullptr);
 
     /**
      * Check if factory is configured and present.

@@ -60,6 +60,10 @@ extern "C" {
 
 
 #define SHLIBPP_SHARED_CLASS_FN extern "C" SHLIBPP_EXPORT
+#define SHLIBPP_DEFAULT_START_CHECK shlibpp::VOCAB('S','H','P','P')
+#define SHLIBPP_DEFAULT_END_CHECK shlibpp::VOCAB('P', 'L', 'U', 'G')
+#define SHLIBPP_DEFAULT_SYSTEM_VERSION 5
+#define SHLIBPP_DEFAULT_FACTORY_NAME "shlibpp_default_factory"
 
 /**
  * Macro to create a bunch of functions with undecorated names that can
@@ -69,11 +73,15 @@ extern "C" {
  * @param factoryname the name of the "hook" function to make.
  *        A collection of other helper functions with names composed of the
  *        factoryname with _create/_destroy/... appended.
+ * @param startcheck a 32-bit integer that is checked when loading a plugin.
+ * @param endcheck a 32-bit integer that is checked when loading a plugin.
+ * @param systemversiona a 32-bit integer representing the version of the plugin
+ *        api that is checked when loading a plugin.
  * @param classname the class that the hook will be able to instantiate.
  * @param basename the superclass that the user of the plugin should be
  *        working with.
  */
-#define SHLIBPP_DEFINE_SHARED_SUBCLASS(factoryname, classname, basename) \
+#define SHLIBPP_DEFINE_SHARED_SUBCLASS_CUSTOM(startcheck, endcheck, systemversion, factoryname, classname, basename) \
     SHLIBPP_SHARED_CLASS_FN void* factoryname ## _create () \
     { \
         classname* cn = new classname; \
@@ -121,9 +129,9 @@ extern "C" {
         if (len < sizeof(shlibpp::SharedLibraryClassApi)) { \
             return -1; \
         } \
-        sapi->startCheck = shlibpp::VOCAB('S','H','P','P'); \
+        sapi->startCheck = startcheck; \
         sapi->structureSize = sizeof(shlibpp::SharedLibraryClassApi); \
-        sapi->systemVersion = 5; \
+        sapi->systemVersion = systemversion; \
         sapi->create = factoryname ## _create; \
         sapi->destroy = factoryname ## _destroy; \
         sapi->getVersion = factoryname ## _getVersion; \
@@ -133,7 +141,7 @@ extern "C" {
         for (int i=0; i<SHLIBPP_SHAREDLIBRARYCLASSAPI_PADDING; i++) { \
             sapi->roomToGrow[i] = 0; \
         } \
-        sapi->endCheck = shlibpp::VOCAB('P', 'L', 'U', 'G'); \
+        sapi->endCheck = endcheck; \
         return sapi->startCheck; \
     }
 // The double cast in the _create() and _destroy() functions are
@@ -147,8 +155,28 @@ extern "C" {
 // leaked), but it is less dangerous than executing some other random
 // function.
 
-#define SHLIBPP_DEFAULT_FACTORY_NAME "shlibpp_default_factory"
-#define SHLIBPP_DEFINE_DEFAULT_SHARED_CLASS(classname) SHLIBPP_DEFINE_SHARED_SUBCLASS(shlibpp_default_factory, classname, classname)
-#define SHLIBPP_DEFINE_SHARED_CLASS(factoryname, classname) SHLIBPP_DEFINE_SHARED_SUBCLASS(factoryname, classname, classname)
+#define SHLIBPP_DEFINE_SHARED_SUBCLASS(factoryname, classname, basename) \
+    SHLIBPP_DEFINE_SHARED_SUBCLASS_CUSTOM(SHLIBPP_DEFAULT_START_CHECK, \
+                                          SHLIBPP_DEFAULT_END_CHECK, \
+                                          SHLIBPP_DEFAULT_SYSTEM_VERSION, \
+                                          factoryname, \
+                                          classname, \
+                                          basename)
+
+#define SHLIBPP_DEFINE_DEFAULT_SHARED_CLASS(classname) \
+    SHLIBPP_DEFINE_SHARED_SUBCLASS_CUSTOM(SHLIBPP_DEFAULT_START_CHECK, \
+                                          SHLIBPP_DEFAULT_END_CHECK, \
+                                          SHLIBPP_DEFAULT_SYSTEM_VERSION, \
+                                          SHLIBPP_DEFAULT_FACTORY_NAME, \
+                                          classname, \
+                                          classname)
+
+#define SHLIBPP_DEFINE_SHARED_CLASS(factoryname, classname) \
+    SHLIBPP_DEFINE_SHARED_SUBCLASS_CUSTOM(SHLIBPP_DEFAULT_START_CHECK, \
+                                          SHLIBPP_DEFAULT_END_CHECK, \
+                                          SHLIBPP_DEFAULT_SYSTEM_VERSION, \
+                                          factoryname, \
+                                          classname, \
+                                          classname)
 
 #endif // SHAREDLIBPP_SHAREDLIBRARYCLASSAPI_H

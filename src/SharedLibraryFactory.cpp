@@ -7,6 +7,7 @@
  */
 
 #include <SharedLibraryFactory.h>
+#include <SharedLibraryClassApi.h>
 #include <SharedLibrary.h>
 #include <Vocab.h>
 
@@ -22,9 +23,12 @@
 class shlibpp::SharedLibraryFactory::Private
 {
 public:
-    Private();
+    Private(int32_t startCheck,
+            int32_t endCheck,
+            int32_t systemVersion,
+            const char* factoryName);
 
-    bool open(const char *dll_name, const char *fn_name);
+    bool open(const char* dll_name);
     bool isValid() const;
     bool useFactoryFunction(void *factory);
 
@@ -37,19 +41,31 @@ public:
     std::string className;
     std::string baseClassName;
     std::string error;
+
+    int32_t startCheck;
+    int32_t endCheck;
+    int32_t systemVersion;
+    const char* factoryName;
 };
 
 
 
-shlibpp::SharedLibraryFactory::Private::Private() :
+shlibpp::SharedLibraryFactory::Private::Private(int32_t startCheck,
+                                                int32_t endCheck,
+                                                int32_t systemVersion,
+                                                const char* factoryName) :
         status(Status::None),
         returnValue(0),
-        rct(1)
+        rct(1),
+        startCheck(startCheck),
+        endCheck(endCheck),
+        systemVersion(systemVersion),
+        factoryName(factoryName)
 {
     memset(&api, 0, sizeof(SharedLibraryClassApi));
 }
 
-bool shlibpp::SharedLibraryFactory::Private::open(const char *dll_name, const char *fn_name)
+bool shlibpp::SharedLibraryFactory::Private::open(const char* dll_name)
 {
     returnValue = 0;
     name = "";
@@ -68,7 +84,7 @@ bool shlibpp::SharedLibraryFactory::Private::open(const char *dll_name, const ch
         error = lib.error();
         return false;
     }
-    void *fn = lib.getSymbol((fn_name != nullptr)?fn_name:SHLIBPP_DEFAULT_FACTORY_NAME);
+    void *fn = lib.getSymbol((factoryName != nullptr) ? factoryName : SHLIBPP_DEFAULT_FACTORY_NAME);
     if (fn == nullptr) {
         status = Status::FactoryNotFound;
         error = lib.error();
@@ -94,19 +110,19 @@ bool shlibpp::SharedLibraryFactory::Private::open(const char *dll_name, const ch
 
 bool shlibpp::SharedLibraryFactory::Private::isValid() const
 {
-    if (returnValue != VOCAB('S','H','P','P')) {
+    if (returnValue != startCheck) {
         return false;
     }
-    if (api.startCheck != VOCAB('S','H','P','P')) {
+    if (api.startCheck != startCheck) {
         return false;
     }
     if (api.structureSize != sizeof(SharedLibraryClassApi)) {
         return false;
     }
-    if (api.systemVersion != 5) {
+    if (api.systemVersion != systemVersion) {
         return false;
     }
-    if (api.endCheck != VOCAB('P','L','U','G')) {
+    if (api.endCheck != endCheck) {
         return false;
     }
     return true;
@@ -124,17 +140,32 @@ bool shlibpp::SharedLibraryFactory::Private::useFactoryFunction(void *factory)
 }
 
 
-
-shlibpp::SharedLibraryFactory::SharedLibraryFactory() :
-        mPriv(new Private())
+shlibpp::SharedLibraryFactory::SharedLibraryFactory(int32_t startCheck,
+                                                    int32_t endCheck,
+                                                    int32_t systemVersion,
+                                                    const char *factoryName) :
+        mPriv(new Private(startCheck, endCheck, systemVersion, factoryName))
 {
 }
 
 shlibpp::SharedLibraryFactory::SharedLibraryFactory(const char *dll_name,
-                                                    const char *fn_name) :
-        SharedLibraryFactory()
+                                                    int32_t startCheck,
+                                                    int32_t endCheck,
+                                                    int32_t systemVersion,
+                                                    const char *factoryName) :
+        SharedLibraryFactory(startCheck, endCheck, systemVersion, factoryName)
 {
-    mPriv->open(dll_name, fn_name);
+    mPriv->open(dll_name);
+}
+
+shlibpp::SharedLibraryFactory::SharedLibraryFactory(const char* dll_name,
+                                                    const char* factoryName) :
+        SharedLibraryFactory(SHLIBPP_DEFAULT_START_CHECK,
+                             SHLIBPP_DEFAULT_END_CHECK,
+                             SHLIBPP_DEFAULT_SYSTEM_VERSION,
+                             factoryName)
+{
+    mPriv->open(dll_name);
 }
 
 shlibpp::SharedLibraryFactory::~SharedLibraryFactory()
@@ -142,9 +173,26 @@ shlibpp::SharedLibraryFactory::~SharedLibraryFactory()
     delete mPriv;
 }
 
-bool shlibpp::SharedLibraryFactory::open(const char *dll_name, const char *fn_name)
+bool shlibpp::SharedLibraryFactory::open(const char *dll_name,
+                                         int32_t startCheck,
+                                         int32_t endCheck,
+                                         int32_t systemVersion,
+                                         const char *factoryName)
 {
-    return mPriv->open(dll_name, fn_name);
+    mPriv->startCheck = startCheck;
+    mPriv->endCheck = endCheck;
+    mPriv->systemVersion = systemVersion;
+    mPriv->factoryName = factoryName;
+    return mPriv->open(dll_name);
+}
+
+bool shlibpp::SharedLibraryFactory::open(const char* dll_name, const char* factoryName)
+{
+    mPriv->startCheck = SHLIBPP_DEFAULT_START_CHECK;
+    mPriv->endCheck = SHLIBPP_DEFAULT_END_CHECK;
+    mPriv->systemVersion = SHLIBPP_DEFAULT_SYSTEM_VERSION;
+    mPriv->factoryName = factoryName;
+    return mPriv->open(dll_name);
 }
 
 bool shlibpp::SharedLibraryFactory::isValid() const

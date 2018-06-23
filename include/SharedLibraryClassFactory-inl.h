@@ -10,14 +10,28 @@
 #define SHAREDLIBPP_SHAREDLIBRARYCLASSFACTORY_INL_H
 
 template <typename T>
-shlibpp::SharedLibraryClassFactory<T>::SharedLibraryClassFactory()
+shlibpp::SharedLibraryClassFactory<T>::SharedLibraryClassFactory(int32_t startCheck,
+                                                                 int32_t endCheck,
+                                                                 int32_t systemVersion,
+                                                                 const char *factoryName) :
+        SharedLibraryFactory(startCheck, endCheck, systemVersion, factoryName)
 {
 }
 
 template <typename T>
 shlibpp::SharedLibraryClassFactory<T>::SharedLibraryClassFactory(const char *dll_name,
-                                                                 const char *fn_name) :
-        SharedLibraryFactory(dll_name,fn_name)
+                                                                 int32_t startCheck,
+                                                                 int32_t endCheck,
+                                                                 int32_t systemVersion,
+                                                                 const char *factoryName) :
+        SharedLibraryFactory(dll_name, startCheck, endCheck, systemVersion, factoryName)
+{
+}
+
+template <typename T>
+shlibpp::SharedLibraryClassFactory<T>::SharedLibraryClassFactory(const char *dll_name,
+                                                                 const char *factoryName) :
+        SharedLibraryFactory(dll_name, factoryName)
 {
 }
 

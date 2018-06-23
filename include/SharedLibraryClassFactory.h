@@ -10,6 +10,7 @@
 #define SHAREDLIBPP_SHAREDLIBRARYCLASSFACTORY_H
 
 #include <SharedLibraryFactory.h>
+#include <SharedLibraryClassApi.h>
 
 namespace shlibpp {
 
@@ -24,10 +25,19 @@ template <class T>
 class SharedLibraryClassFactory : public SharedLibraryFactory
 {
 public:
-    explicit SharedLibraryClassFactory();
+    explicit SharedLibraryClassFactory(int32_t startCheck = SHLIBPP_DEFAULT_START_CHECK,
+                                       int32_t endCheck = SHLIBPP_DEFAULT_END_CHECK,
+                                       int32_t systemVersion = SHLIBPP_DEFAULT_SYSTEM_VERSION,
+                                       const char *factoryName = nullptr);
 
     explicit SharedLibraryClassFactory(const char *dll_name,
-                                       const char *fn_name = nullptr);
+                                       int32_t startCheck = SHLIBPP_DEFAULT_START_CHECK,
+                                       int32_t endCheck = SHLIBPP_DEFAULT_END_CHECK,
+                                       int32_t systemVersion = SHLIBPP_DEFAULT_SYSTEM_VERSION,
+                                       const char *factoryName = nullptr);
+
+    explicit SharedLibraryClassFactory(const char *dll_name,
+                                       const char *factoryName = nullptr);
 
     T *create() const;
 
