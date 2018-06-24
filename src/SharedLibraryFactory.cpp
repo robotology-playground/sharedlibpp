@@ -6,9 +6,9 @@
  * BSD-3-Clause license. See the accompanying LICENSE file for details.
  */
 
-#include <SharedLibraryFactory.h>
-#include <SharedLibraryClassApi.h>
-#include <SharedLibrary.h>
+#include <shlibpp/SharedLibraryFactory.h>
+#include <shlibpp/SharedLibraryClassApi.h>
+#include <shlibpp/SharedLibrary.h>
 
 #include <sys/stat.h>
 #if defined(_WIN32)

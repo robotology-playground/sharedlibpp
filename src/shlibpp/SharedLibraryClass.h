@@ -9,7 +9,7 @@
 #ifndef SHAREDLIBPP_SHAREDLIBRARYCLASS_H
 #define SHAREDLIBPP_SHAREDLIBRARYCLASS_H
 
-#include <SharedLibraryClassFactory.h>
+#include <shlibpp/SharedLibraryClassFactory.h>
 
 namespace shlibpp {
 
@@ -123,6 +123,6 @@ private:
 } // namespace shlibpp
 
 
-#include <SharedLibraryClass-inl.h>
+#include <shlibpp/SharedLibraryClass-inl.h>
 
 #endif // SHAREDLIBPP_SHAREDLIBRARYCLASS_H

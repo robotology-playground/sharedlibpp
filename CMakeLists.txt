@@ -4,22 +4,23 @@
 # This software may be modified and distributed under the terms of the
 # BSD-3-Clause license. See the accompanying LICENSE file for details.
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.5)
 
-project(sharedlib++)
+project(shlibpp
+        VERSION 0.0.1
+        DESCRIPTION "Tiny cross-platform plug-in system (dll, so, dylib)"
+        LANGUAGES CXX)
 
-# Create the library
-file(GLOB folder_source ./src/*.cpp)
-file(GLOB_RECURSE folder_header ./include/*.h)
-source_group("Source Files" FILES ${folder_source})
-source_group("Header Files" FILES ${folder_header})
-
-include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
-add_library(sharedlib++ ${folder_source} ${folder_header})
-
-if(UNIX)
-  target_link_libraries(sharedlib++ dl)
+set(BUILD_SHARED_LIBS 1)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+if(MSVC)
+  set(CMAKE_DEBUG_POSTFIX "d")
 endif()
+
+add_subdirectory(src)
 
 # Create examples
 option(BUILD_EXAMPLES "Build examples" ON)

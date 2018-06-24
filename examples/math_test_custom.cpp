@@ -9,8 +9,8 @@
 #include <stdio.h>
 #include "MyMathCustom.h"
 
-#include <SharedLibraryClass.h>
-#include <SharedLibrary.h>
+#include <shlibpp/SharedLibraryClass.h>
+#include <shlibpp/SharedLibrary.h>
 
 
 int main(int argc, char *argv[])

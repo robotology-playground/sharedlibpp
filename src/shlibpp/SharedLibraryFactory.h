@@ -18,7 +18,7 @@ class SharedLibraryClassApi;
 /**
  * A wrapper for a named factory method in a named shared library.
  * This wrapper will do some basic checks that the named method does
- * indeed behave like a YARP plugin hook before offering access to it.
+ * indeed behave like a shlibpp plugin hook before offering access to it.
  * This is to avoid accidents, it is not a security mechanism.
  */
 class SharedLibraryFactory

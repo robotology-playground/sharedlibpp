@@ -9,8 +9,8 @@
 #ifndef SHAREDLIBPP_SHAREDLIBRARYCLASSFACTORY_H
 #define SHAREDLIBPP_SHAREDLIBRARYCLASSFACTORY_H
 
-#include <SharedLibraryFactory.h>
-#include <SharedLibraryClassApi.h>
+#include <shlibpp/SharedLibraryFactory.h>
+#include <shlibpp/SharedLibraryClassApi.h>
 
 namespace shlibpp {
 
@@ -46,6 +46,6 @@ public:
 
 } // namespace shlibpp
 
-#include <SharedLibraryClassFactory-inl.h>
+#include <shlibpp/SharedLibraryClassFactory-inl.h>
 
 #endif // SHAREDLIBPP_SHAREDLIBRARYCLASSFACTORY_H
