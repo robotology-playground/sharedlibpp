@@ -1,4 +1,3 @@
-
 Simple cross platform plug-in system
 ====================================
 
@@ -41,13 +40,3 @@ The build system by defualt compiles and build the examples.
 ```
     > math_test math.dll
 ```
-
-## Co-author and development lead
-
-- Ali Paikan (ali.paikan@gmail.com)
-
-
-## Original author
-
-- Paul Fitzpatrick
-
