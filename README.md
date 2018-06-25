@@ -4,10 +4,11 @@ Simple cross platform plug-in system
 The sharedlibpp is a tiny cross-platform library to create and load shared
 libraries for different platform (Linux/Mac/Windows). The sharedlibpp provide
 an easy and portable way to create plug-ins which encapsulate your c++ classes
-inside a shared library (so, dylib, dll). The original code is taken and from
-[YARP](http://wiki.icub.org/yarpdoc/index.html) (Yet Another Robot Platform).
-The code is simplified by removing dependencies and some helper functions are added
-to report the native OS error messages on failures.
+inside a shared library (so, dylib, dll).
+The original code is taken and from
+[YARP (Yet Another Robot Platform)](http://www.yarp.it/).
+The code is simplified by removing dependencies and some helper functions are
+added to report the native OS error messages on failures.
 
 
 Building on Linux/Mac
