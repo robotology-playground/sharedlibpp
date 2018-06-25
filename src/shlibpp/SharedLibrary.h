@@ -9,6 +9,7 @@
 #ifndef SHAREDLIBPP_SHAREDLIBRARY_H
 #define SHAREDLIBPP_SHAREDLIBRARY_H
 
+#include <shlibpp/api.h>
 #include <string>
 
 namespace shlibpp {
@@ -17,7 +18,7 @@ namespace shlibpp {
  * Low-level wrapper for loading shared libraries (DLLs) and accessing
  * symbols within it.
  */
-class SharedLibrary
+class SHLIBPP_API SharedLibrary
 {
 public:
     /**
@@ -81,7 +82,7 @@ public:
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 private:
-    class Private;
+    class SHLIBPP_HIDDEN Private;
     Private* mPriv;
 #endif
 };

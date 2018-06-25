@@ -11,16 +11,70 @@ project(shlibpp
         DESCRIPTION "Tiny cross-platform plug-in system (dll, so, dylib)"
         LANGUAGES CXX)
 
-set(BUILD_SHARED_LIBS 1)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+# For now keep YCM as a soft dependency
+find_package(YCM 0.8.1 QUIET)
+if(NOT YCM_FOUND)
+  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+endif()
+
+# Set output directories for targets
+include(GNUInstallDirs)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}")
+
+# Set postfix for debug builds on MSVC
 if(MSVC)
   set(CMAKE_DEBUG_POSTFIX "d")
 endif()
 
+# Encourage user to specify a build type (e.g. Release, Debug, etc.), otherwise set it to Release.
+if(NOT CMAKE_CONFIGURATION_TYPES)
+    if(NOT CMAKE_BUILD_TYPE)
+        message(STATUS "Setting build type to 'Release' as none was specified.")
+        set_property(CACHE CMAKE_BUILD_TYPE PROPERTY VALUE "Release")
+    endif()
+endif()
+
+# Shared/Dynamic or Static library?
+option(BUILD_SHARED_LIBS "Build libraries as shared as opposed to static" ON)
+
+# Enable RPATH?
+option(SHLIBPP_ENABLE_RPATH "Enable RPATH for this library" ON)
+mark_as_advanced(SHLIBPP_ENABLE_RPATH)
+include(AddInstallRPATHSupport)
+add_install_rpath_support(BIN_DIRS "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}"
+                          LIB_DIRS "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
+                          INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}"
+                          DEPENDS SHLIBPP_ENABLE_RPATH
+                          USE_LINK_PATH)
+
+# Build in pure c++11
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Build position independent code
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+# Hide all symbols by default
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
+
 add_subdirectory(src)
+
+# Install CMake config files for the library
+include(InstallBasicPackageFiles)
+install_basic_package_files(shlibpp
+                            VERSION ${shlibpp_VERSION}
+                            COMPATIBILITY AnyNewerVersion
+                            EXPORT shlibpp
+                            NO_CHECK_REQUIRED_COMPONENTS_MACRO)
+
+# Add uninstall target
+include(AddUninstallTarget)
+
+
 
 # Create examples
 option(BUILD_EXAMPLES "Build examples" ON)

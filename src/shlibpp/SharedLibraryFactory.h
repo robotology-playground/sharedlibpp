@@ -9,6 +9,7 @@
 #ifndef SHAREDLIBPP_SHAREDLIBRARYFACTORY_H
 #define SHAREDLIBPP_SHAREDLIBRARYFACTORY_H
 
+#include <shlibpp/api.h>
 #include <string>
 
 namespace shlibpp {
@@ -21,7 +22,7 @@ class SharedLibraryClassApi;
  * indeed behave like a shlibpp plugin hook before offering access to it.
  * This is to avoid accidents, it is not a security mechanism.
  */
-class SharedLibraryFactory
+class SHLIBPP_API SharedLibraryFactory
 {
 public:
     /**
@@ -224,7 +225,7 @@ public:
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 private:
-    class Private;
+    class SHLIBPP_HIDDEN Private;
     Private* mPriv;
 #endif
 };

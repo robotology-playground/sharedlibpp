@@ -9,8 +9,8 @@
 #ifndef SHAREDLIBPP_SHAREDLIBRARYCLASSAPI_H
 #define SHAREDLIBPP_SHAREDLIBRARYCLASSAPI_H
 
-#include "config.h"
-
+#include <shlibpp/api.h>
+#include <shlibpp/config.h>
 #include <cstring>
 
 namespace shlibpp {
@@ -26,7 +26,7 @@ extern "C" {
      * Be careful to check carefully for compatibility before
      * using create() or destroy().
      */
-    struct SharedLibraryClassApi {
+    struct SHLIBPP_API SharedLibraryClassApi {
     public:
         int32_t startCheck;    // A 32-bit integer that is checked when loading
                                // a plugin.

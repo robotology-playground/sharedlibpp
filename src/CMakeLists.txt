@@ -6,7 +6,17 @@
 
 include (GNUInstallDirs)
 
-set(shlibpp_HDRS shlibpp/config.h
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/shlibpp/config.h.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/shlibpp/config.h"
+               @ONLY)
+
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/shlibpp/version.h.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/shlibpp/version.h"
+               @ONLY)
+
+set(shlibpp_HDRS "${CMAKE_CURRENT_BINARY_DIR}/shlibpp/config.h"
+                 "${CMAKE_CURRENT_BINARY_DIR}/shlibpp/version.h"
+                 shlibpp/api.h
                  shlibpp/SharedLibraryClassApi.h
                  shlibpp/SharedLibraryClassFactory.h
                  shlibpp/SharedLibraryClassFactory-inl.h
@@ -15,13 +25,21 @@ set(shlibpp_HDRS shlibpp/config.h
                  shlibpp/SharedLibraryFactory.h
                  shlibpp/SharedLibrary.h)
 
-set(shlibpp_SRCS SharedLibrary.cpp
+set(shlibpp_SRCS version.cpp
+                 SharedLibrary.cpp
                  SharedLibraryFactory.cpp)
 
 add_library(shlibpp ${shlibpp_SRCS} ${shlibpp_HDRS})
 add_library(shlibpp::shlibpp ALIAS shlibpp)
 
+# Add build definitions
+if(NOT BUILD_SHARED_LIBS)
+  target_compile_definitions(shlibpp PRIVATE SHLIBPP_STATIC)
+endif()
+set_target_properties(shlibpp PROPERTIES DEFINE_SYMBOL BUILDING_SHLIBPP)
+
 target_include_directories(shlibpp PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+                                          $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
                                           $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 if(NOT CMAKE_MINIMUM_REQUIRED_VERSION VERSION_LESS 3.8)
@@ -38,8 +56,6 @@ endif()
 if(UNIX)
   target_link_libraries(shlibpp PRIVATE dl)
 endif()
-
-
 
 set_property(TARGET shlibpp PROPERTY PUBLIC_HEADER ${shlibpp_HDRS})
 set_property(TARGET shlibpp PROPERTY VERSION ${shlibpp_VERSION})
