@@ -23,20 +23,22 @@ The easiest way is to use Cmake to create VStudio project. To do that:
 
 * download and install [cmake](http://www.cmake.org/download/) for windows.
 * open the cmake gui and set the source path to `sharedlibpp` and set the
-  build path (for exmaple `sharedlibpp/build`).
+  build path (for example `sharedlibpp/build`).
 * configure and generate visual studio project.
 * open the project and built it.
 
-Running exmaple
-----------------
+Running example
+---------------
 The build system by defualt compiles and build the examples.
 
 * On Linux/Mac
 ```
     $ cd sharedlibpp/build/examples
     $ ./math_test libmymath.so
+    $ ./math_test_custom libmymathcustom.so
 ```
 * On Windows first switch to directory where example is created and then
 ```
-    > math_test math.dll
+    > math_test mymath.dll
+    > math_test_custom mymathcustom.dll
 ```
