@@ -74,6 +74,11 @@ install_basic_package_files(shlibpp
 # Add uninstall target
 include(AddUninstallTarget)
 
+# Do not put tests and examples in the same output directories as the main
+# targets
+unset(CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+unset(CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+unset(CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
 
 
 # Create examples
