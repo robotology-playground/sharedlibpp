@@ -39,14 +39,11 @@ endif()
 # Shared/Dynamic or Static library?
 option(BUILD_SHARED_LIBS "Build libraries as shared as opposed to static" ON)
 
-# Enable RPATH?
-option(SHLIBPP_ENABLE_RPATH "Enable RPATH for this library" ON)
-mark_as_advanced(SHLIBPP_ENABLE_RPATH)
+# Enable RPATH Support
 include(AddInstallRPATHSupport)
-add_install_rpath_support(BIN_DIRS "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}"
-                          LIB_DIRS "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
-                          INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}"
-                          DEPENDS SHLIBPP_ENABLE_RPATH
+add_install_rpath_support(BIN_DIRS "${CMAKE_INSTALL_FULL_LIBDIR}"
+                          LIB_DIRS "${CMAKE_INSTALL_FULL_BINDIR}"
+                          INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}"
                           USE_LINK_PATH)
 
 # Build in pure c++11
