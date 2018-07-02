@@ -83,7 +83,7 @@ bool shlibpp::SharedLibraryFactory::Private::open(const char* dll_name)
         error = lib.error();
         return false;
     }
-    void *fn = lib.getSymbol((factoryName != nullptr) ? factoryName : SHLIBPP_DEFAULT_FACTORY_NAME);
+    void *fn = lib.getSymbol((factoryName != nullptr) ? factoryName : SHLIBPP_DEFAULT_FACTORY_NAME_STRING);
     if (fn == nullptr) {
         status = Status::FactoryNotFound;
         error = lib.error();

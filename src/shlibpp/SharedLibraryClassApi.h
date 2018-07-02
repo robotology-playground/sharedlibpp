@@ -71,7 +71,12 @@ constexpr int32_t SHLIBPP_DEFAULT_END_CHECK =
     (static_cast<int32_t>('U') << 16) +
     (static_cast<int32_t>('G') << 24);
 constexpr int32_t SHLIBPP_DEFAULT_SYSTEM_VERSION = 5;
-#define SHLIBPP_DEFAULT_FACTORY_NAME "shlibpp_default_factory"
+#define SHLIBPP_DEFAULT_FACTORY_NAME shlibpp_default_factory
+
+#define SHLIBPP_STRINGIFY2(X) #X
+#define SHLIBPP_STRINGIFY(X) SHLIBPP_STRINGIFY2(X)
+#define SHLIBPP_DEFAULT_FACTORY_NAME_STRING SHLIBPP_STRINGIFY(SHLIBPP_DEFAULT_FACTORY_NAME)
+
 
 /**
  * Macro to create a bunch of functions with undecorated names that can
