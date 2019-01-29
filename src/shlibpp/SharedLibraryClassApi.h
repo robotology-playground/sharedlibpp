@@ -10,10 +10,11 @@
 #define SHAREDLIBPP_SHAREDLIBRARYCLASSAPI_H
 
 #include <shlibpp/api.h>
-#include <shlibpp/config.h>
 #include <cstring>
 
 namespace shlibpp {
+
+constexpr size_t padding = 30 - 2 * (sizeof(void*) / 4);
 
 // Be careful loading C++ classes from DLLs.  Generally you
 // need an exact or very close match between compilers used
@@ -48,7 +49,7 @@ extern "C" {
         getFn_t getClassName;     // Name of plugin (subclass).
         getFn_t getBaseClassName; // Name superclass.
 
-        int32_t roomToGrow[SHLIBPP_SHAREDLIBRARYCLASSAPI_PADDING]; // Padding.
+        int32_t roomToGrow[padding]; // Padding.
         int32_t endCheck;      // A 32-bit integer that is checked when loading
                                // a plugin.
     };
@@ -151,7 +152,7 @@ constexpr int32_t SHLIBPP_DEFAULT_SYSTEM_VERSION = 5;
         sapi->getAbi = factoryname ## _getAbi; \
         sapi->getClassName = factoryname ## _getClassName; \
         sapi->getBaseClassName = factoryname ## _getBaseClassName; \
-        for (int i=0; i<SHLIBPP_SHAREDLIBRARYCLASSAPI_PADDING; i++) { \
+        for (size_t i = 0; i < shlibpp::padding; i++) { \
             sapi->roomToGrow[i] = 0; \
         } \
         sapi->endCheck = endcheck; \
