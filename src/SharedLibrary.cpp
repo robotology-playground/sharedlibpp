@@ -55,55 +55,63 @@ bool SharedLibrary::open(const char *filename)
     close();
 #if defined(_WIN32)
     mPriv->implementation = (void*)LoadLibrary(filename);
-    LPTSTR msg = nullptr;
-    FormatMessage(
-       FORMAT_MESSAGE_FROM_SYSTEM |FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,
-       nullptr, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-       (LPTSTR)&msg, 0, nullptr);
+    if (!mPriv->implementation) {
+        LPTSTR msg = nullptr;
+        FormatMessage(
+            FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,
+            nullptr, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+            (LPTSTR)&msg, 0, nullptr);
 
-    if(msg != nullptr) {
-        mPriv->err_message = std::string(msg);
-       // release memory allocated by FormatMessage()
-       LocalFree(msg); msg = nullptr;
+        if (msg != nullptr) {
+            mPriv->err_message = std::string(msg);
+            // release memory allocated by FormatMessage()
+            LocalFree(msg); msg = nullptr;
+        }
     }
     return (mPriv->implementation != nullptr);
 #else
     mPriv->implementation = dlopen(filename, RTLD_LAZY);
-    char* msg = dlerror();
-    if(msg)
-        mPriv->err_message = msg;
+    if (!mPriv->implementation) {
+        char* msg = dlerror();
+        if (msg)
+            mPriv->err_message = msg;
+    }
     return mPriv->implementation != nullptr;
 #endif
 }
 
 bool SharedLibrary::close() {
-    int result = 0;
+    bool error = false;
     if (mPriv->implementation != nullptr) {
 #if defined(WIN32)
-        result = FreeLibrary((HINSTANCE)mPriv->implementation);
-        LPTSTR msg = nullptr;
-        FormatMessage(
-           FORMAT_MESSAGE_FROM_SYSTEM |FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,
-           nullptr, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-           (LPTSTR)&msg, 0, nullptr);
+        auto result = FreeLibrary((HINSTANCE)mPriv->implementation);
+        if (!result) {
+            error = true;
+            LPTSTR msg = nullptr;
+            FormatMessage(
+                FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,
+                nullptr, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                (LPTSTR)&msg, 0, nullptr);
 
-        if(msg != nullptr) {
-            mPriv->err_message = std::string(msg);
-            // release memory allocated by FormatMessage()
-            LocalFree(msg); msg = nullptr;
+            if (msg != nullptr) {
+                mPriv->err_message = std::string(msg);
+                // release memory allocated by FormatMessage()
+                LocalFree(msg); msg = nullptr;
+            }
         }
 #else
-        result = dlclose(mPriv->implementation);
+        auto result = dlclose(mPriv->implementation);
         if (result != 0) {
-        char* msg = dlerror();
-        if(msg)
-            mPriv->err_message = msg;
+            error = true;
+            char* msg = dlerror();
+            if(msg)
+                mPriv->err_message = msg;
         }
 #endif
         mPriv->implementation = nullptr;
 
     }
-    return (result == 0);
+    return error;
 }
 
 std::string SharedLibrary::error()
