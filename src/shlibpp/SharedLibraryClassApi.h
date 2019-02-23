@@ -40,7 +40,7 @@ extern "C" {
 
         using createFn_t = void*(*)();
         using destroyFn_t = void(*)(void*);
-        using getFn_t = int32_t(*)(char*, size_t);
+        using getFn_t = size_t(*)(char*, size_t);
 
         createFn_t create;        // Instantiate a plugin object.
         destroyFn_t destroy;      // Destroy a plugin object.
@@ -114,24 +114,24 @@ constexpr int32_t SHLIBPP_DEFAULT_SYSTEM_VERSION = 5;
         } \
     } \
     \
-    SHLIBPP_SHARED_CLASS_FN int32_t factoryname ## _getVersion (char* ver, size_t len) \
+    SHLIBPP_SHARED_CLASS_FN size_t factoryname ## _getVersion (char* ver, size_t len) \
     { \
         return 0; \
     } \
     \
-    SHLIBPP_SHARED_CLASS_FN int32_t factoryname ## _getAbi (char* abi, size_t len) \
+    SHLIBPP_SHARED_CLASS_FN size_t factoryname ## _getAbi (char* abi, size_t len) \
     { \
         return 0; \
     } \
     \
-    SHLIBPP_SHARED_CLASS_FN int32_t factoryname ## _getClassName (char* name, size_t len) \
+    SHLIBPP_SHARED_CLASS_FN size_t factoryname ## _getClassName (char* name, size_t len) \
     { \
         char cname[] = # classname; \
         strncpy(name, cname, len); \
         return strlen(cname) + 1; \
     } \
     \
-    SHLIBPP_SHARED_CLASS_FN int32_t factoryname ## _getBaseClassName (char* name, size_t len) \
+    SHLIBPP_SHARED_CLASS_FN size_t factoryname ## _getBaseClassName (char* name, size_t len) \
     { \
         char cname[] = # basename; \
         strncpy(name, cname, len); \
